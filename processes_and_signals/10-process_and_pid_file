@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# This script creates a PID file, runs infinitely, and handles signals
+
+echo $$ > /var/run/myscript.pid
+
+cleanup() {
+    rm -f /var/run/myscript.pid
+    exit
+}
+
+sigterm_handler() {
+    echo "I hate the kill command"
+    cleanup
+}
+
+sigint_handler() {
+    echo "Y U no love me?!"
+}
+
+trap sigterm_handler SIGTERM
+trap sigint_handler SIGINT
+trap cleanup SIGQUIT
+
+while true
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
